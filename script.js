@@ -23,17 +23,11 @@ function searchPost() {
 
 function getPost(postId) {
 
-    return new Promise((resolve, reject) => {
-
-        fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
-
-            .then(response => response.json())
-
-            .then(post => post.id ? resolve(post) : reject(new Error('Post not found')))
-            .catch(error => {
-                reject(new Error('Failed to fetch post'));
-            });
-    });
+    return fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
+        .then(response => response.ok ? response.json() : reject(new Error('Post not found')))
+        .catch(error => {
+            reject(new Error('Failed to fetch post'));
+        });
 }
 
 function getComments() {
@@ -42,9 +36,7 @@ function getComments() {
     const postId = numInput.value;
 
     fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`)
-
         .then(response => response.json())
-
         .then(comments => {
             const postContainer = document.getElementById('postContainer');
             postContainer.innerHTML += `<h4>Comments:</h4>`;
